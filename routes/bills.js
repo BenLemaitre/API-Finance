@@ -32,7 +32,25 @@ router.get('/', function(req, res) {
         return res.status(401).send({message: 'Please log in'});
     } 
     Bill.findAll().then(bill => {
-        return res.status(200).json(bill);
+        res.status(200).json(bill);
+
+        var total = 0;
+        var totalRegistration = 0;
+        var totalLibrary = 0;
+
+        for(var i in bill) {
+            if(bill[i].paid) {
+                total += bill[i].amount;
+                if(bill[i].service === 'registration') {
+                    totalRegistration += bill[i].amount;
+                } else if(bill[i].service === 'library') {
+                    totalLibrary += bill[i].amount;
+                }
+            }
+            console.log("total: ", total);
+            console.log("total registration: ", totalRegistration);
+            console.log("total library: ", totalLibrary);
+        }
     });
 });
 
